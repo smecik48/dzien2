@@ -8,6 +8,11 @@
         <div v-for="(wpis, index) in wpisy" class="drop-shadow-x1 bg-stone-300 p-4">
             <p>{{ wpis }}</p>
             <button @click="usunWpis(index)" class="bg-blue-600 rounded text-white p-4">Usun</button>
+            <div>
+                <input type="text" v-model="edycja[index]" class="border-2 border-blue-600 p-4">
+                <button @click="edytujWpis(index, edycja[index])" class="bg-blue-600 rounded text-white p-4">Edytuj</button>
+            </div>
+
         </div>
         </div>
         <div class="flex justify-center flex-col">
@@ -23,7 +28,8 @@ import { dzien2_backend } from 'declarations/dzien2_backend/index';
         data(){
             return{
                 wpisy: [],
-                nowyBlog: ""
+                nowyBlog: "",
+                edycja: []
             }
         },
         methods: {
@@ -38,9 +44,13 @@ import { dzien2_backend } from 'declarations/dzien2_backend/index';
             async pobierzWpisy(){
                 this.wpisy = await dzien2_backend.odczytaj_wpisy();
             },
+            async edytujWpis(index, nowyWpis){
+                await dzien2_backend.edytuj_wpis(index, nowyWpis);
+                await this.pobierzWpisy();
+            },
             async mounted(){
                 this.pobierzWpisy();
             }
-        }
-    }
+            
+    }}
 </script>
